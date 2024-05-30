@@ -1,0 +1,54 @@
+{% extends 'admin/base_site.html' %}
+{% block content %}
+<h1>THỐNG KÊ BÁO CÁO DỊCH VỤ</h1>
+<h2>Tổng số hóa đơn đã thanh toán: {{ total_paid_invoices }}</h2>
+<ul>
+    {% for payment in course_stats %}
+    <li>
+        Payment ID: {{ payment.id }} - Total Price: {{ payment.amount }}
+        <ul>
+            {% for service in payment.bill.services.all %}
+            <li>Service ID: {{ service.id }} - Name: {{ service.name }} - Price: {{ service.priceService }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+<div style="width: 50%">
+    <canvas id="myChart"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let labels = [];
+    let data = [];
+    {% for payment in course_stats %}
+        labels.push('{{ payment.id }}')
+        data.push({{ payment.amount}})
+
+     {% endfor %}
+
+
+    window.onload = function(){
+        const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'polarArea',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Hóa đơn',
+        data: data,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+    }
+</script>
+{% endblock %}
