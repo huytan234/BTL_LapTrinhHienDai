@@ -21,14 +21,12 @@ class UserSerializer(serializers.ModelSerializer):
             }
         }
 
-
-class ItemSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # để hiển thị dường dân tuyệt đối của ảnh trên swagger
         rep = super().to_representation(instance)
-        image = instance.image
-        if image:
-            rep['image'] = image.url
+        avatar = instance.avatar
+        if avatar:
+            rep['avatar'] = avatar.url
         return rep
 
 
@@ -38,10 +36,10 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'nameService', 'priceService']
 
 
-class BillSerializer(ItemSerializer):
+class BillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bill
-        fields = ['id', 'name', 'bill_date', 'created_date', 'service', 'user']
+        fields = ['id', 'name', 'bill_date', 'created_date', 'service']
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -51,11 +49,19 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = ['id', 'bill', 'status', 'amount', 'payment_image', 'created_date', 'transaction_id', 'user']
 
+    # def to_representation(self, instance):
+    #     # để hiển thị dường dân tuyệt đối của ảnh trên swagger
+    #     rep = super().to_representation(instance)
+    #     payment_image = instance.payment_image
+    #     if payment_image:
+    #         rep['payment_image'] = payment_image.url
+    #     return rep
+
 
 class ResidentFamilySerializer(serializers.ModelSerializer):
     class Meta:
         model = ResidentFamily
-        fields = ['id', 'name', 'cccd', 'sdt', 'created_date', 'updated_date', 'active', 'user_id', 'status']
+        fields = ['id', 'name', 'cccd', 'sdt', 'created_date', 'active', 'user_id', 'status']
 
 
 class TuDoSerializer(serializers.ModelSerializer):

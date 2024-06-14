@@ -7,3 +7,7 @@ class PaymentPaginator(pagination.PageNumberPagination):
 
 class PackagePaginator(pagination.PageNumberPagination):
     page_size = 5
+
+
+class TuDoPaginator(pagination.PageNumberPagination):
+    page_size = 5

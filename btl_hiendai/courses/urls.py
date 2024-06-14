@@ -6,6 +6,7 @@ from .admin import admin_site
 r = routers.DefaultRouter()
 r.register('users', views.UserViewSet, 'users')
 r.register('services', views.ServiceViewSet, 'services')
+r.register('bills', views.BillViewSet, 'bills')
 r.register('payments', views.PaymentViewSet, 'payments')
 r.register('tudos', views.TuDoViewSet, 'tudos')
 r.register('packages', views.PackageViewSet, 'packages')

@@ -50,7 +50,6 @@ class Bill(BaseModel):
         ('vnpay', 'vn pay')
     )
     name = models.CharField(max_length=50, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='bills')
     bill_date = models.DateField(default=datetime.date.today)
     payment_method = models.CharField(max_length=20, choices=STATUS_CHOICES, default='momo')
     service = models.ManyToManyField(Service, related_name='hoa_don')
@@ -71,7 +70,8 @@ class Payment(BaseModel):
         ('pending', 'Chua thanh toan'),
         ('pass', 'Da thanh toan')
     )
-    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='payment')
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, null=True, related_name='services')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_date = models.DateTimeField(auto_now_add=True)
@@ -84,6 +84,7 @@ class Payment(BaseModel):
 
 # ý 5
 class ResidentFamily(BaseModel):
+    objects = None
     STATUS_CHOICES = (
         ('pending', 'Cho xu ly'),
         ('pass', 'Xu ly thanh cong')
@@ -94,10 +95,10 @@ class ResidentFamily(BaseModel):
     sdt = models.CharField(max_length=15)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
-        self.errors = None
-        self.data = None
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(args, kwargs)
+    #     self.errors = None
+    #     self.data = None
 
     def __str__(self):
         return f'{self.name} - nguoi than cua: {self.user.username}'
@@ -150,6 +151,7 @@ class Contract(BaseModel):
 
 # ý 7
 class TuDo(BaseModel):
+    DoesNotExist = None
     objects = None
     name = models.CharField(max_length=50, null=True)
     # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tudos')
@@ -159,6 +161,7 @@ class TuDo(BaseModel):
 
 
 class Package(BaseModel):
+    DoesNotExist = None
     objects = None
     STATUS_CHOICES = (
         ('waiting', 'Cho nhan hang'),
